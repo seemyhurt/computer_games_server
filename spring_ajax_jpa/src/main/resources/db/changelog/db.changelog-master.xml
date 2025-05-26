@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="Artem Sobakin">
+        <comment>Create table developer</comment>
+        <createTable tableName="developer">
+            <column name="developer_id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="developer_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(50)"/>
+            <column name="founded_date" type="DATE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Artem Sobakin">
+        <comment>Create table publisher</comment>
+        <createTable tableName="publisher">
+            <column name="publisher_id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="publisher_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Artem Sobakin">
+        <comment>Сreate table game with foreign keys</comment>
+        <createTable tableName="game">
+            <column name="game_id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)"/>
+            <column name="release_date" type="DATE"/>
+            <column name="developer_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint 
+            baseTableName="game"
+            baseColumnNames="developer_id"
+            referencedTableName="developer"
+            referencedColumnNames="developer_id"
+            constraintName="fk_GAME_DEVELOPER"/>
+            
+        <addForeignKeyConstraint 
+            baseTableName="game"
+            baseColumnNames="publisher_id"
+            referencedTableName="publisher"
+            referencedColumnNames="publisher_id"
+            constraintName="fk_GAME_PUBLISHER"/>
+    </changeSet>
+
+</databaseChangeLog>

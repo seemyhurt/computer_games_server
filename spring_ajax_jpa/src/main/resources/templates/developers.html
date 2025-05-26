@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Developers Info</title>
+    <link rel="icon" type="image/x-icon" href="../static/css/favicon.ico" th:href="@{/css/favicon.ico}">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"></link>
+
+    <script src="../static/js/angular.min.js" th:src="@{/js/angular.min.js}"></script> 
+    <script src="../static/js/developers.js" th:src="@{/js/developers.js}"></script>
+</head>
+
+<body ng-app="developers" ng-controller="DevelopersController">
+
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <a href="/ComputerGames/" class="nav-link">Main Page</a>
+            <a href="/ComputerGames/pages/games" class="nav-link">Games</a>
+            <a href="/ComputerGames/pages/developers" class="nav-link">Developers</a>
+            <a href="/ComputerGames/pages/publishers" class="nav-link">Publishers</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Developers Info</h1>
+        </header>
+        
+        <div class="table-responsive" ng-show="developersList.length > 0">
+            <table id="developers-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>Founded date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="developer in developersList">
+                        <td>{{developer.id}}</td>
+                        <td>{{developer.name}}</td>
+                        <td>{{developer.country}}</td>
+                        <td>{{developer.foundedDate}}</td>
+                        <td>
+                            <button class="action-btn delete-btn" title="Delete" ng-click="deleteDeveloper(developer.id)">x</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h1>Add New Developer</h1>
+        
+        <form id="addForm" ng-submit="addDeveloper()">
+            <div class="form-group">
+                <label for="name">Developer Name</label>
+                <input type="text" id="name" name="name" required
+                    minlength="2" maxlength="100"
+                    placeholder="Enter developer name" ng-model="newDeveloper.name">
+                <div class="error">Please enter a valid developer name (2-100 characters)</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country" ng-model="newDeveloper.country" required>
+                    <option value="" selected disabled>Select country</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Poland">Poland</option>
+                    <option value="Russia">Russia</option>
+                    <option value="China">China</option>
+                    <option value="South Korea">South Korea</option>
+                </select>
+                <div class="error">Please select a country</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="founded-date">Founded Date</label>
+                <input type="date" id="founded-date" name="foundedDate" required
+                    placeholder="Select founded date" ng-model="newDeveloper.foundedDate" min="01-01-1900" max="12-31-2030">
+                <div class="error">Please select a valid founded date</div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn">Add Developer</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

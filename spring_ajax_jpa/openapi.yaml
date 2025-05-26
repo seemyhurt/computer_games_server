@@ -1,0 +1,631 @@
+openapi: 3.0.1
+info:
+  title: Game Management Service
+  description: API for managing computer games, developers and publishers
+  version: 1.0.0
+  
+servers:
+  - url: http://localhost:8080/ComputerGames
+
+tags:
+  - name: Games
+    description: Computer games management
+  - name: Developers
+    description: Game developers management
+  - name: Publishers
+    description: Game publishers management
+    
+paths:
+  /games:
+    get:
+      tags: [Games]
+      summary: Get all games
+      responses:
+        '200':
+          description: List of all games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+                  
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+    post:
+      tags: [Games]
+      summary: Create a new game
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Game title
+                  example: "The Witcher 3: Wild Hunt"
+                developer:
+                  type: integer
+                  description: Game developer identifier
+                  example: 1
+                publisher:
+                  type: integer
+                  description: Game publisher identifier
+                  example: 1
+                price:
+                  type: number
+                  format: double
+                  description: Game price
+                  example: 39.99
+                releaseDate:
+                  type: string
+                  format: date
+                  description: Game release date
+                  example: 2015-05-19
+              required:
+                - title
+                - developer
+                - publisher
+                - price
+                - releaseDate
+      responses:
+        '201':
+          description: Game created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /games/{id}:
+    delete:
+      tags: [Games]
+      summary: Delete a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Game deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+    get:
+      tags: [Games]
+      summary: Get a game by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Game finded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /developers:
+    get:
+      tags: [Developers]
+      summary: Get all developers
+      responses:
+        '200':
+          description: List of all developers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Developer'
+                  
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+    post:
+      tags: [Developers]
+      summary: Create a new developer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Developer name
+                  example: CD Projekt Red
+                country:
+                  type: string
+                  description: Developer country
+                  example: Poland
+                foundedDate:
+                  type: string
+                  format: date
+                  description: Developer founded date
+                  example: 1994-02-01
+              required:
+                - name
+                - country
+                - foundedDate
+      responses:
+        '201':
+          description: Developer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /developers/{id}:
+    delete:
+      tags: [Developers]
+      summary: Delete a developer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Developer deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Developer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+    get:
+      tags: [Developers]
+      summary: Get a developer by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Developer finded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Developer'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Developer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /publishers:
+    get:
+      tags: [Publishers]
+      summary: Get all publishers
+      responses:
+        '200':
+          description: List of all publishers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Publisher'
+        
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+          
+    post:
+      tags: [Publishers]
+      summary: Create a new publisher
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Game publisher name
+                  example: CD Projekt
+                country:
+                  type: string
+                  description: Game publisher country
+                  example: Poland
+              required:
+                - name
+                - country
+                
+      responses:
+        '201':
+          description: Publisher created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+              
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /publishers/{id}:
+    delete:
+      tags: [Publishers]
+      summary: Delete a publisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Publisher deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Publisher not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+    
+    get:
+      tags: [Publishers]
+      summary: Get a publisher by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Publisher finded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+        '400':
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+          
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '403':
+          description: Authentication granted but user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+                
+        '404':
+          description: Publisher not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Game identifier
+          example: 1
+        title:
+          type: string
+          description: Game title
+          example: "The Witcher 3: Wild Hunt"
+        price:
+          type: number
+          description: Game price
+          format: double
+          example: 39.99
+        releaseDate:
+          type: string
+          format: date
+          description: Game release data
+          example: 2015-05-19
+        developer:
+          type: integer
+          description: Game developer identifier
+          example: 1
+        publisher:
+          type: integer
+          description: Game publisher identifier
+          example: 1
+      required:
+        - id
+        - title
+        - price
+        - releaseDate
+        - developer
+        - publisher
+
+    Developer:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Game developer identifier
+          example: 1
+        name:
+          type: string
+          description: Game developer name
+          example: CD Projekt Red
+        country:
+          type: string
+          description: Game developer country
+          example: Poland
+        foundedDate:
+          type: string
+          format: date
+          description: Game developer founded data
+          example: 1994-02-01
+      required:
+        - id
+        - name
+        - country
+        - foundedDate
+
+    Publisher:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Game publisher identifier
+          example: 1
+        name:
+          type: string
+          description: Game publisher name
+          example: CD Projekt
+        country:
+          type: string
+          description: Game publisher county
+          example: Poland
+      required:
+        - id
+        - name
+        - country
+
+    OperationStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Description of the operation execution status
+          example: Operation error, invalid fields
